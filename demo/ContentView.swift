@@ -36,34 +36,37 @@ struct ContentView: View {
                 
                 ScrollView(showsIndicators: false) {
                     VStack(spacing: 20) {
-                        // Checking Account Tile
-                        AccountTile(
-                            title: "Checking",
-                            balance: "$12,459.82",
-                            accountNumber: "•••• 4829",
-                            backgroundColor: Color.primaryBlue,
-                            accentColor: Color.gold,
-                            icon: "checkmark.circle.fill"
-                        )
-                        
-                        // Savings Account Tile
-                        AccountTile(
-                            title: "Savings",
-                            balance: "$45,230.15",
-                            accountNumber: "•••• 5671",
-                            backgroundColor: Color.secondaryBlue,
-                            accentColor: Color.gold,
-                            icon: "heart.circle.fill"
-                        )
-                        
-                        // Credit Card Tile
-                        CreditCardTile(
-                            cardholderName: "Sarah Johnson",
-                            cardNumber: "•••• •••• •••• 3456",
-                            expiryDate: "12/26",
-                            availableCredit: "$8,750.00",
-                            accentColor: Color.gold
-                        )
+                        NavigationLink(destination: CheckingAccountView(account: sampleCheckingAccount)) {
+                            AccountTile(
+                                title: "Checking",
+                                balance: "$12,459.82",
+                                accountNumber: "•••• 4829",
+                                backgroundColor: Color.primaryBlue,
+                                accentColor: Color.gold,
+                                icon: "checkmark.circle.fill"
+                            )
+                        }
+
+                        NavigationLink(destination: SavingsAccountView(account: sampleSavingsAccount)) {
+                            AccountTile(
+                                title: "Savings",
+                                balance: "$45,230.15",
+                                accountNumber: "•••• 5671",
+                                backgroundColor: Color.secondaryBlue,
+                                accentColor: Color.gold,
+                                icon: "heart.circle.fill"
+                            )
+                        }
+
+                        NavigationLink(destination: CreditCardDetailView(account: sampleCreditCardAccount)) {
+                            CreditCardTile(
+                                cardholderName: "Sarah Johnson",
+                                cardNumber: "•••• •••• •••• 3456",
+                                expiryDate: "12/26",
+                                availableCredit: "$8,750.00",
+                                accentColor: Color.gold
+                            )
+                        }
                     }
                     .padding(.horizontal, 20)
                     .padding(.vertical, 24)
