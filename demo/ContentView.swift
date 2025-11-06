@@ -43,9 +43,46 @@ struct ContentView: View {
                             accountNumber: "•••• 4829",
                             backgroundColor: Color.primaryBlue,
                             accentColor: Color.gold,
-                            icon: "checkmark.circle.fill"
+                            icon: "checkmark.circle.fill",
+                            transactions: [
+                                Transaction(
+                                    description: "Starbucks Coffee",
+                                    amount: "-$5.42",
+                                    date: "Today",
+                                    category: "Dining",
+                                    isDebit: true
+                                ),
+                                Transaction(
+                                    description: "Direct Deposit",
+                                    amount: "+$2,500.00",
+                                    date: "Nov 1",
+                                    category: "Income",
+                                    isDebit: false
+                                ),
+                                Transaction(
+                                    description: "Whole Foods Market",
+                                    amount: "-$87.34",
+                                    date: "Nov 1",
+                                    category: "Groceries",
+                                    isDebit: true
+                                ),
+                                Transaction(
+                                    description: "Amazon Purchase",
+                                    amount: "-$45.99",
+                                    date: "Oct 31",
+                                    category: "Shopping",
+                                    isDebit: true
+                                ),
+                                Transaction(
+                                    description: "Gym Membership",
+                                    amount: "-$50.00",
+                                    date: "Oct 30",
+                                    category: "Health",
+                                    isDebit: true
+                                )
+                            ]
                         )
-                        
+
                         // Savings Account Tile
                         AccountTile(
                             title: "Savings",
@@ -53,16 +90,90 @@ struct ContentView: View {
                             accountNumber: "•••• 5671",
                             backgroundColor: Color.secondaryBlue,
                             accentColor: Color.gold,
-                            icon: "heart.circle.fill"
+                            icon: "heart.circle.fill",
+                            transactions: [
+                                Transaction(
+                                    description: "Transfer In",
+                                    amount: "+$1,000.00",
+                                    date: "Oct 29",
+                                    category: "Transfer",
+                                    isDebit: false
+                                ),
+                                Transaction(
+                                    description: "Interest Earned",
+                                    amount: "+$12.35",
+                                    date: "Oct 28",
+                                    category: "Interest",
+                                    isDebit: false
+                                ),
+                                Transaction(
+                                    description: "Transfer Out",
+                                    amount: "-$500.00",
+                                    date: "Oct 20",
+                                    category: "Transfer",
+                                    isDebit: true
+                                ),
+                                Transaction(
+                                    description: "Interest Earned",
+                                    amount: "+$11.80",
+                                    date: "Sep 28",
+                                    category: "Interest",
+                                    isDebit: false
+                                ),
+                                Transaction(
+                                    description: "Transfer In",
+                                    amount: "+$2,000.00",
+                                    date: "Sep 15",
+                                    category: "Transfer",
+                                    isDebit: false
+                                )
+                            ]
                         )
-                        
+
                         // Credit Card Tile
                         CreditCardTile(
                             cardholderName: "Sarah Johnson",
                             cardNumber: "•••• •••• •••• 3456",
                             expiryDate: "12/26",
                             availableCredit: "$8,750.00",
-                            accentColor: Color.gold
+                            accentColor: Color.gold,
+                            transactions: [
+                                Transaction(
+                                    description: "Apple Music",
+                                    amount: "-$10.99",
+                                    date: "Nov 2",
+                                    category: "Subscription",
+                                    isDebit: true
+                                ),
+                                Transaction(
+                                    description: "Restaurant Giovanni",
+                                    amount: "-$68.42",
+                                    date: "Nov 1",
+                                    category: "Dining",
+                                    isDebit: true
+                                ),
+                                Transaction(
+                                    description: "Target Store",
+                                    amount: "-$156.23",
+                                    date: "Oct 31",
+                                    category: "Shopping",
+                                    isDebit: true
+                                ),
+                                Transaction(
+                                    description: "United Airlines",
+                                    amount: "-$485.00",
+                                    date: "Oct 28",
+                                    category: "Travel",
+                                    isDebit: true
+                                ),
+                                Transaction(
+                                    description: "Payment Received",
+                                    amount: "+$1,200.00",
+                                    date: "Oct 25",
+                                    category: "Payment",
+                                    isDebit: false
+                                )
+                            ]
                         )
                     }
                     .padding(.horizontal, 20)
@@ -94,38 +205,46 @@ struct AccountTile: View {
     let backgroundColor: Color
     let accentColor: Color
     let icon: String
-    
+    let transactions: [Transaction]
+
     var body: some View {
-        VStack(alignment: .leading, spacing: 0) {
-            HStack(alignment: .top) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(title)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.white)
-                    
+        NavigationLink(destination: TransactionListView(
+            accountTitle: title,
+            accountBalance: balance,
+            accountNumber: accountNumber,
+            transactions: transactions
+        )) {
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text(title)
+                            .font(.system(size: 16, weight: .semibold))
+                            .foregroundColor(.white)
+
+                        Spacer()
+                            .frame(height: 12)
+
+                        Text(balance)
+                            .font(.system(size: 32, weight: .bold))
+                            .foregroundColor(.white)
+
+                        Text(accountNumber)
+                            .font(.system(size: 14, weight: .regular))
+                            .foregroundColor(.white.opacity(0.8))
+                    }
+
                     Spacer()
-                        .frame(height: 12)
-                    
-                    Text(balance)
-                        .font(.system(size: 32, weight: .bold))
-                        .foregroundColor(.white)
-                    
-                    Text(accountNumber)
-                        .font(.system(size: 14, weight: .regular))
-                        .foregroundColor(.white.opacity(0.8))
+
+                    Image(systemName: icon)
+                        .font(.system(size: 28))
+                        .foregroundColor(accentColor)
                 }
-                
-                Spacer()
-                
-                Image(systemName: icon)
-                    .font(.system(size: 28))
-                    .foregroundColor(accentColor)
+                .padding(24)
+                .background(backgroundColor)
             }
-            .padding(24)
-            .background(backgroundColor)
+            .cornerRadius(16)
+            .frame(height: 180)
         }
-        .cornerRadius(16)
-        .frame(height: 180)
     }
 }
 
@@ -135,100 +254,108 @@ struct CreditCardTile: View {
     let expiryDate: String
     let availableCredit: String
     let accentColor: Color
-    
+    let transactions: [Transaction]
+
     var body: some View {
-        VStack(spacing: 0) {
-            VStack(alignment: .leading, spacing: 0) {
-                HStack {
-                    Text("Credit Card")
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.white)
-                    
-                    Spacer()
-                    
-                    Image(systemName: "creditcard.fill")
-                        .font(.system(size: 24))
-                        .foregroundColor(accentColor)
-                }
-                .padding(24)
-                .padding(.bottom, 8)
-                
-                VStack(alignment: .leading, spacing: 20) {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Card Number")
-                            .font(.system(size: 12, weight: .regular))
-                            .foregroundColor(.white.opacity(0.7))
-                        
-                        Text(cardNumber)
-                            .font(.system(size: 18, weight: .semibold, design: .monospaced))
-                            .foregroundColor(.white)
-                            .tracking(2)
-                    }
-                    
+        NavigationLink(destination: TransactionListView(
+            accountTitle: "Credit Card",
+            accountBalance: availableCredit,
+            accountNumber: cardNumber,
+            transactions: transactions
+        )) {
+            VStack(spacing: 0) {
+                VStack(alignment: .leading, spacing: 0) {
                     HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("Card Holder")
-                                .font(.system(size: 12, weight: .regular))
-                                .foregroundColor(.white.opacity(0.7))
-                            
-                            Text(cardholderName)
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        
-                        VStack(alignment: .trailing, spacing: 4) {
-                            Text("Expires")
-                                .font(.system(size: 12, weight: .regular))
-                                .foregroundColor(.white.opacity(0.7))
-                            
-                            Text(expiryDate)
-                                .font(.system(size: 14, weight: .semibold))
-                                .foregroundColor(.white)
-                        }
-                    }
-                }
-                .padding(.horizontal, 24)
-                .padding(.bottom, 24)
-            }
-            .background(
-                LinearGradient(
-                    gradient: Gradient(colors: [Color.darkBlue, Color.primaryBlue.opacity(0.8)]),
-                    startPoint: .topLeading,
-                    endPoint: .bottomTrailing
-                )
-            )
-            
-            HStack(spacing: 0) {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("Available Credit")
-                        .font(.system(size: 12, weight: .regular))
-                        .foregroundColor(.grayText)
-                    
-                    Text(availableCredit)
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.darkBlue)
-                }
-                
-                Spacer()
-                
-                HStack(spacing: 12) {
-                    Button(action: {}) {
-                        Text("Pay")
-                            .font(.system(size: 14, weight: .semibold))
+                        Text("Credit Card")
+                            .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 40)
-                            .background(Color.primaryBlue)
-                            .cornerRadius(8)
+
+                        Spacer()
+
+                        Image(systemName: "creditcard.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(accentColor)
+                    }
+                    .padding(24)
+                    .padding(.bottom, 8)
+
+                    VStack(alignment: .leading, spacing: 20) {
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Card Number")
+                                .font(.system(size: 12, weight: .regular))
+                                .foregroundColor(.white.opacity(0.7))
+
+                            Text(cardNumber)
+                                .font(.system(size: 18, weight: .semibold, design: .monospaced))
+                                .foregroundColor(.white)
+                                .tracking(2)
+                        }
+
+                        HStack {
+                            VStack(alignment: .leading, spacing: 4) {
+                                Text("Card Holder")
+                                    .font(.system(size: 12, weight: .regular))
+                                    .foregroundColor(.white.opacity(0.7))
+
+                                Text(cardholderName)
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.white)
+                            }
+
+                            Spacer()
+
+                            VStack(alignment: .trailing, spacing: 4) {
+                                Text("Expires")
+                                    .font(.system(size: 12, weight: .regular))
+                                    .foregroundColor(.white.opacity(0.7))
+
+                                Text(expiryDate)
+                                    .font(.system(size: 14, weight: .semibold))
+                                    .foregroundColor(.white)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, 24)
+                    .padding(.bottom, 24)
+                }
+                .background(
+                    LinearGradient(
+                        gradient: Gradient(colors: [Color.darkBlue, Color.primaryBlue.opacity(0.8)]),
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+
+                HStack(spacing: 0) {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Available Credit")
+                            .font(.system(size: 12, weight: .regular))
+                            .foregroundColor(.grayText)
+
+                        Text(availableCredit)
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.darkBlue)
+                    }
+
+                    Spacer()
+
+                    HStack(spacing: 12) {
+                        Button(action: {}) {
+                            Text("Pay")
+                                .font(.system(size: 14, weight: .semibold))
+                                .foregroundColor(.white)
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 40)
+                                .background(Color.primaryBlue)
+                                .cornerRadius(8)
+                        }
                     }
                 }
+                .padding(20)
+                .background(Color.white)
             }
-            .padding(20)
-            .background(Color.white)
+            .cornerRadius(16)
         }
-        .cornerRadius(16)
     }
 }
 
